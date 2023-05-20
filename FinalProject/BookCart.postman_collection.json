@@ -1,0 +1,524 @@
+{
+	"info": {
+		"_postman_id": "c8537254-746f-45db-8adc-2e6137f4279a",
+		"name": "BookCart",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these request types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT and PATCH requests.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a variable called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Tests\" tab**\n\nTests help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/b5f280a7-4b09-48ec-857f-0a7ed99d7ef8/U2NyZWVuc2hvdCAyMDIzLTAzLTI3IGF0IDkuNDcuMjggUE0ucG5n\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n- Add more scripts in \"Tests\" to verify if the API works as expected and execute flows.\n    \n\n## ℹ️ Resources\n\n[Building requests](https://learning.postman.com/docs/sending-requests/requests/)  \n[Authorizing requests](https://learning.postman.com/docs/sending-requests/authorization/)  \n[Using variables](https://learning.postman.com/docs/sending-requests/variables/)  \n[Managing environments](https://learning.postman.com/docs/sending-requests/managing-environments/)  \n[Writing scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26709277"
+	},
+	"item": [
+		{
+			"name": "List of available books",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is JSON format\", function () {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response structure is valid\", function () {",
+							"    pm.response.json().forEach(book => {",
+							"        pm.expect(book).to.have.all.keys(JSON.parse(pm.environment.get(\"keys\")))",
+							"        pm.expect(Number.isInteger(book.bookId))",
+							"        pm.expect(Number.isInteger(book.price))",
+							"        pm.expect(book.title).to.be.a(\"string\")",
+							"        pm.expect(book.author).to.be.a(\"string\")",
+							"        pm.expect(book.category).to.be.a(\"string\")",
+							"        pm.expect(book.coverFileName).to.be.a(\"string\")",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/Book",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"Book"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Book by valid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response structure is valid\", function () {\r",
+							"    pm.expect(pm.response.json()).to.have.all.keys(JSON.parse(pm.environment.get(\"keys\")))\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/Book/{{validBookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"Book",
+						"{{validBookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book by invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/Book/{{invalidBookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"Book",
+						"{{invalidBookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book by non-integer ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/Book/{{nonIntegerBookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"Book",
+						"{{nonIntegerBookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of available categories",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON format\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"})\r",
+							"\r",
+							"let categoryKeys = [\"categoryId\", \"categoryName\"];\r",
+							"pm.test(\"Response structure is valid\", function () {\r",
+							"    pm.response.json().forEach(category => {\r",
+							"        pm.expect(category).to.have.all.keys(categoryKeys);\r",
+							"        pm.expect(Number.isInteger(category.categoryId));\r",
+							"        pm.expect(category.categoryName).to.be.a(\"string\")\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/Book/GetCategoriesList",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"Book",
+						"GetCategoriesList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Similar books",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON format\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response structure is valid\", function () {\r",
+							"    pm.response.json().forEach(book => {\r",
+							"        pm.expect(book).to.have.all.keys(JSON.parse(pm.environment.get(\"keys\")))\r",
+							"        pm.expect(Number.isInteger(book.bookId))\r",
+							"        pm.expect(Number.isInteger(book.price))\r",
+							"        pm.expect(book.title).to.be.a(\"string\")\r",
+							"        pm.expect(book.author).to.be.a(\"string\")\r",
+							"        pm.expect(book.category).to.be.a(\"string\")\r",
+							"        pm.expect(book.coverFileName).to.be.a(\"string\")\r",
+							"    })\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response contains 5 books\", function () {\r",
+							"    pm.expect(pm.response.json().length).to.equal(5);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"All books have the same category\", function () {\r",
+							"    pm.response.json().forEach(book => {\r",
+							"        pm.expect(book.category).to.equal(pm.environment.get(\"bookCategory\"))\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/Book/GetSimilarBooks/{{validBookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"Book",
+						"GetSimilarBooks",
+						"{{validBookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON format\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"let loginReponseKeys = [\"token\", \"userDetails\"]\r",
+							"pm.test(\"Response structure is valid\", function () {\r",
+							"    pm.expect(pm.response.json()).to.have.all.keys(loginReponseKeys)\r",
+							"    pm.expect(pm.response.json().token).to.be.a(\"string\")\r",
+							"    pm.expect(pm.response.json().userDetails).to.be.an(\"object\")\r",
+							"})\r",
+							"\r",
+							"let userDetailsKeys = [\"userId\", \"firstName\", \"lastName\", \"username\", \"password\", \"gender\", \"userTypeId\"]\r",
+							"let userDetails = pm.response.json().userDetails;\r",
+							"pm.test(\"User details have all required fields\", function () {\r",
+							"    pm.expect(userDetails).to.have.all.keys(userDetailsKeys)\r",
+							"    pm.expect(Number.isInteger(userDetails.userId))\r",
+							"    pm.expect(Number.isInteger(userDetails.userTypeId))\r",
+							"    pm.expect(userDetails.firstName).to.satisfy (value => value === null || typeof value === \"string\")\r",
+							"    pm.expect(userDetails.lastName).to.satisfy (value => value === null || typeof value === \"string\")\r",
+							"    pm.expect(userDetails.username).to.satisfy (value => value === null || typeof value === \"string\")\r",
+							"    pm.expect(userDetails.password).to.satisfy (value => value === null || typeof value === \"string\")\r",
+							"    pm.expect(userDetails.gender).to.satisfy (value => value === null || typeof value === \"string\")\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userId\": 0,\r\n  \"firstName\": \"string\",\r\n  \"lastName\": \"string\",\r\n  \"username\": \"string\",\r\n  \"password\": \"string\",\r\n  \"gender\": \"string\",\r\n  \"userTypeId\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/Login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"Login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of items in cart",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/ShoppingCart/{{userID}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"ShoppingCart",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Clear cart",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/ShoppingCart/{{userID}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"ShoppingCart",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a book to cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/ShoppingCart/AddToCart/{{userID}}/4",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"ShoppingCart",
+						"AddToCart",
+						"{{userID}}",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reduces the quantity by one",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/ShoppingCart/{{userID}}/{{validBookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"ShoppingCart",
+						"{{userID}}",
+						"{{validBookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a single item from cart",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/ShoppingCart/{{userID}}/{{validBookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"ShoppingCart",
+						"{{userID}}",
+						"{{validBookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Count of items in cart by user ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/User/{{userID}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"User",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Availability of username",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/User/validateUserName/harry",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"User",
+						"validateUserName",
+						"harry"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register a new user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userId\": 0,\r\n  \"firstName\": \"string\",\r\n  \"lastName\": \"string\",\r\n  \"username\": \"string\",\r\n  \"password\": \"string\",\r\n  \"gender\": \"string\",\r\n  \"userTypeId\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/User",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"User"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}

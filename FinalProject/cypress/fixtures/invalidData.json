@@ -1,0 +1,9 @@
+{
+    "firstName": "xyz",
+    "lastName": "xyz",
+    "userName": "xyz2",
+    "invalidPassword": "xyz",
+    "validPassword": "Xyz123456",
+    "confirmPassword": "xyz",
+    "gender": "Female"
+  }

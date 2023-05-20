@@ -1,0 +1,21 @@
+{
+    "firstName": "harry",
+    "lastName": "potter",
+    "userName": "harrypotter1",
+    "password": "Harry123456",
+    "confirmPassword": "Harry123456",
+    "gender": "Male",
+    "exactBookTitle": "HP3",
+    "partialBookTitle": "HP",
+    "nonExistentBookTitle": "non-existent Book",
+    "exactAuthor": "JKR",
+    "partialAuthor": "JK",
+    "category": "Romance",
+    "allCategory": "All Categories",
+    "price": "₹213.00",
+    "name": "Mr.Potter",
+    "addressLine1": "Gryffindor House",
+    "addressLine2": "Hogwarts School",
+    "pinCode": "123456",
+    "state": "UK"
+  }
